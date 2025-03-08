@@ -1,40 +1,66 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import discord
 import os
-from discord.ext import commands
-from config import TOKEN
 import logging
+from discord import app_commands
+from config import TOKEN
 
 # Konfiguracja logowania błędów do pliku
-logging.basicConfig(level=logging.INFO, filename="bot.log",
-                    format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO,
+    filename="bot.log",
+    format="%(asctime)s - %(levelname)s - %(message)s",
+)
 
 # Ustawienie uprawnień bota (wymagane do poprawnego działania)
+# WAŻNE: `message_content` musi być włączone w panelu Discord
 intents = discord.Intents.default()
-intents.messages = True  # Pozwala nasłuchiwać wiadomości
+# intents.messages = True  # Pozwala nasłuchiwać wiadomości
 intents.guilds = True  # Dostęp do serwerów
 intents.message_content = True  # Wymagane przez Discord API
 
-# Tworzenie instancji bota z prefiksem komend
-bot = commands.Bot(command_prefix="!", intents=intents)
+# Tworzenie instancji bota dla `slash commands`
+bot = commands.Bot(intents=intents, help_command=None)
+
 
 # Obsługa błędów komend
 @bot.event
-async def on_command_error(ctx, error):
-    if isinstance(error, commands.CommandNotFound):
-        await ctx.send("Nie znaleziono takiej komendy. Użyj `!help`.")
-    else:
-        await ctx.send(f"Wystąpił błąd: {error}")
+async def on_application_command_error(ctx, error):
+    """Obsługa błędów dla komend aplikacyjnych (/)."""
+    await ctx.respond(f"Wystąpił błąd: {error}")
 
-# Zdarzenie informujące, że bot jest online + ładowanie cogs (modułów)
+# Zdarzenie uruchomienia bota
+#   informacja że bot jest online
+#   ładowanie cogs (modułów)
+#   synchronizacja komend
 @bot.event
 async def on_ready():
-    print(f'Bot {bot.user} jest online!')
+    """Funkcja wywoływana po uruchomieniu bota."""
+    print(f"Bot {bot.user} jest online!")
+    logging.info(f"Bot {bot.user} jest online")
+
+    # Automatyczne ładowanie wszystkich modułów (cogs)
     for filename in os.listdir("./cogs"):
         if filename.endswith(".py"):
-            # Automatycznie ładuje moduły (cogs)
-            # filename[:-3] usuwa .py z nazwy pliku z ./cogs/
-            await bot.load_extension(f"cogs.{filename[:-3]}")
-            print(f'Załadowano: cogs.{filename[:-3]}')
+            try:
+                # filename[:-3] usuwa .py z nazwy pliku z ./cogs/
+                await bot.load_extension(f"cogs.{filename[:-3]}")
+                logger.info(f"Załadowano moduł: cogs.{filename[:-3]}")
+            except Exception as e:
+                logger.error(f"Błąd ładowania {filename}: {e}", exc_info=True)
+
+    # Synchronizacja komend aplikacyjnych `slash commands`
+    try:
+        synced = await bot.tree.sync()
+        logging.info(f"Zsynchronizowano {len(synced)} komend aplikacyjnych.")
+    except Exception as e:
+        logging.error(f"Błąd synchronizacji komend: {e}", exc_info=True)
+
 
 # Uruchamianie bota
-bot.run(TOKEN)
+try:
+    bot.run(TOKEN)
+except Exception as e:
+    logger.critical(f"Krytyczny błąd uruchamiania bota: {e}", exc_info=True)
