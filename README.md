@@ -1,77 +1,50 @@
 # SansGranieDiscord
 
-Opis kiedyś będize
 
 
-## ⚙️ Wymagania
+### Środowisko
 
-Przed uruchomieniem bota upewnij się, że masz:
+(https://mareknowak.pl/python-wirtualne-srodowisko-venv/)
 
-- Python 3.12+ (na takim pracuje)
-- Zainstalowane zależności `requirements.txt` (patrz niżej)
-- Token bota wygenerowany na [Discord Developer Portal](https://discord.com/developers/applications)
+$`python3 -m venv venv`
 
-## 🔧 Instalacja
+$`source venv/bin/activate`
 
-### 1. Sklonuj repozytorium
+$`deactivate`
 
-`git clone https://github.com/SzymONOFF/SansGranieDiscord.git`
+(venv) $`pip install discord python-dotenv`
 
-`cd SansGranieDiscord`
 
-### 2. Stwórz środowisko `venv`
-
-`python3 -m venv venv`
-
-`source venv/bin/activate`
-
-`deactivate`
-
-### 3. Zainstaluj wymagane biblioteki
-
-`pip install -r requirements.txt`
-
-### 4. Dodaj token bota
-
-Edytuj plik `.env` i wprowadź swój token:
+Plik .env (zawiera token)
 
 ```
-DISCORD_TOKEN=YOUR_BOT_TOKEN
+DISCORD_TOKEN=...token...
 ```
 
-### 5. Uprawnienia
+`chmod 600 .env`
 
-**DO_ZROBIENIA**
+ - Tylko właściciel może czytać i modyfikować plik
+ - Inni użytkownicy nie mogą go zobaczyć
 
-Mam nadzieje że to dobre ustawienie
+Pliki kodu (bot.py, config.py, itp.)
 
-```
-chmod 600 .env
-chmod 644 bot.py config.py
-chmod 700 SansGranieDiscord/
-chmod 700 cogs/ venv/
-```
+`chmod 644 bot.py config.py`
 
-### 6. Uruchom bota
+ - Właściciel może czytać i edytować
+ - Inni mogą czytać (ale nie zmieniać)
 
-#### ⚡ Uruchamianie bota jako program
+Foldery (cogs/, venv/) 
 
-`python3 bot.py`
+`chmod 700 discord-bot`
 
-#### ⚡ Uruchamianie bota w tle
+ - Właściciel może wszystko
+ - Inni użytkownicy nie mają dostępu
 
-`nohup python3 bot.py`
-
-## 📂 Struktura programu
+Plik .gitignore :
 
 ```
-discord-bot/
-│── cogs/              # Folder z modułami (cogs)
-│   ├── basic.py       # Przykładowy moduł
-│── logs/              # Folder z logami (cogs)
-│   ├── *.log          # generowany automatyczne
-│── .env               # Plik z tokenem bota
-│── config.py          #
-│── bot.py             # Główny plik bota
-│── requirements.txt   # Lista wymaganych pakietów
+.env
+venv/
+__pycache__/
 ```
+
