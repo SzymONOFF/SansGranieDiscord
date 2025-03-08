@@ -1,20 +1,17 @@
-from discord.ext import commands
+import discord
+from discord import app_commands
 
-# Moduł podstawowych komend
 class Basic(commands.Cog):
+    """Podstawowe komendy bota"""
 
     def __init__(self, bot):
         self.bot = bot
 
-    # Komenda testowa
-    @commands.command()
-    async def ping(self, ctx):
-        await ctx.send("Pong!")
-
-    @commands.command()
-    async def help(self, ctx):
-        await ctx.send("Nie ma pomocy.")
-
+    @discord.app_commands.command(name="ping", description="Sprawdza, czy bot działa")
+    async def ping(self, interaction: discord.Interaction):
+        """Zwraca 'Pong!' w odpowiedzi na /ping"""
+        await interaction.response.send_message("Pong!", ephemeral=True)  # ephemeral=True = widoczne tylko dla użytkownika
 
 async def setup(bot):
+    """Ładowanie cogu"""
     await bot.add_cog(Basic(bot))
