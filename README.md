@@ -60,7 +60,7 @@ chmod 700 cogs/ venv/
 
 #### ⚡ Uruchamianie bota w tle
 
-`nohup python bot.py > bot.log 2>&1 &`
+`nohup python3 bot.py`
 
 ## 📂 Struktura programu
 
