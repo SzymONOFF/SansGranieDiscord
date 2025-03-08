@@ -5,6 +5,7 @@ import discord
 import os
 import logging
 from discord import app_commands
+from discord.ext import commands
 from config import TOKEN
 
 # Konfiguracja logowania błędów do pliku
