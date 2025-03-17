@@ -8,6 +8,12 @@ from discord import app_commands
 from discord.ext import commands
 from config import TOKEN
 
+
+# sprawdza, czy katalog 'logs/' istnieje, i tworzy go, jeśli nie
+if not os.path.exists("logs"):
+    os.makedirs("logs")
+
+
 # Konfiguracja logowania błędów do pliku
 logging.basicConfig(
     level=logging.INFO,
