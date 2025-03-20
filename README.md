@@ -17,7 +17,7 @@ Przed uruchomieniem bota upewnij się, że masz:
 ### 1. Sklonuj repozytorium
 
 ```
-git clone https://github.com/SzymONOFF/SansGranieDiscord.git
+git clone https://github.com/Szymon-Rojek/SansGranieDiscord.git
 ```
 
 ```
